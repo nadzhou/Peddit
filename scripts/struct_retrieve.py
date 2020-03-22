@@ -4,6 +4,7 @@ from Bio.PDB import *
 from pathlib import Path
 from Bio import SeqIO
 import subprocess
+import pandas as pd
 
 def parse_arguments(parser=None): 
     """Parse arguments given by the terminal for PDB ID."""
@@ -12,7 +13,7 @@ def parse_arguments(parser=None):
     parser.add_argument("id_input", help="Input PDB ID")
     args = parser.parse_args()
 
-    return args
+    return args                                                                                                                                                                                                                                                                         
 class Pedtior: 
     """"Class to edit the PDB file and then write PDB file back"""
     def __init__(self, args): 
@@ -28,14 +29,15 @@ class Pedtior:
         Returns 
             PDB structure file
         """
-        Pdb_id = self.args.id_input
+        Pdb_id = str(self.args.id_input)
         pdbl = PDBList()
         ppb = PPBuilder()
 
-        pdbl.retrieve_pdb_file(Pdb_id, file_format='pdb', pdir=".")
-        p = Path(f'pdb{Pdb_id}.ent')
-        p.replace(f'{Pdb_id}.pdb')
-        print("PDB file written.")
+        retrieve = pdbl.retrieve_pdb_file(Pdb_id, file_format='pdb', pdir=".")
+        if retrieve:  
+            p = Path(f'pdb{Pdb_id}.ent')
+            p.replace(f'{Pdb_id}.pdb')
+            print("PDB file written.")
 
     def editor(self): 
         """
@@ -54,19 +56,20 @@ class Pedtior:
         record = []
         with open(f"{self.args.id_input}.pdb", "r") as f: 
             for line in f: 
-                if "HETATM" in line: 
-                    if "HOH" not in line: 
+                if 'HETATM' in line: 
+                    if "ATP" in line: 
+                        line = line.replace('ATP', 'LIG')
                         record.append(line)
-                    elif "ATP" in line: 
-                        line = line.replace("ATP", 'LIG')
+                    if 'HOH' not in line: 
                         record.append(line)
+                    
                 elif 'CONECT' not in line: 
                     record.append(line)                
         print("ATPs changed to LIG.\nHETATM water removed")
         print("File written to be written.")          
         return record
                     
-    def printer(self, self.args, record): 
+    def printer(self, args, record): 
         """
         Write the record list from the 
         editor function to file. 
@@ -93,5 +96,9 @@ class Pedtior:
                 return ("Perl analysis script failed.")
 
 args = parse_arguments()    
-struct_seq_retrieve(args)
-seq_extract(args)
+c = Pedtior(args)
+c.struct_retrieve()
+
+a = c.editor()
+c.printer(args, a)
+
