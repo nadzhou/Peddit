@@ -112,11 +112,6 @@ class Pedtior:
                 
         print("\nFile written. Ready for data analysis.")
         
-    def execute_vmd_script(self): 
-        cmd = list(("source command").split(" "))        
-        r = subprocess.Popen(cmd)
-        r.communicate()
-        
         
     def execute_vmd(self): 
         """
