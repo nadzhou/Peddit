@@ -1,10 +1,15 @@
-import argparse as ap 
-from Bio.PDB import PDBList
-from Bio.PDB import *
-from pathlib import Path
-from Bio import SeqIO
+import os
 import subprocess
+import numpy as np
 import pandas as pd
+import argparse as ap 
+from Bio.PDB import *
+import seaborn as sns
+from Bio import SeqIO
+from pathlib import Path
+from Bio.PDB import PDBList
+import matplotlib.pyplot as plt
+
 
 def parse_arguments(parser=None): 
     """Parse arguments given by the terminal for PDB ID."""
@@ -13,7 +18,28 @@ def parse_arguments(parser=None):
     parser.add_argument("id_input", help="Input PDB ID")
     args = parser.parse_args()
 
-    return args                                                                                                                                                                                                                                                                         
+    return args   
+
+def plotter(in_file): 
+    """
+    Plot the result.csv file on seaborn barplot
+     
+    Args: 
+        Bonds CSV file [str]
+        
+    Returns: 
+        Seaborn barplot
+    """
+    
+    data = pd.read_csv(in_file)
+
+    interaction = np.array(data['interaction'])
+    value = np.array(data['value'])
+
+
+    sns.lineplot(x=interaction, y=value)
+    plt.show()    
+                                                                                                                                                                                                                                                                            
 class Pedtior: 
     """"Class to edit the PDB file and then write PDB file back"""
     def __init__(self, args): 
@@ -37,7 +63,7 @@ class Pedtior:
         if retrieve:  
             p = Path(f'pdb{Pdb_id}.ent')
             p.replace(f'{Pdb_id}.pdb')
-            print("PDB file written.")
+            print("\nPDB file written.")
 
     def editor(self): 
         """
@@ -66,7 +92,7 @@ class Pedtior:
                 elif 'CONECT' not in line: 
                     record.append(line)                
         print("ATPs changed to LIG.\nHETATM water removed")
-        print("File written to be written.")          
+        print(f"\n Edited file has been rewritten to {self.args.id_input}")          
         return record
                     
     def printer(self, args, record): 
@@ -84,21 +110,51 @@ class Pedtior:
             for i in record: 
                 f.write(i)
                 
-        print("File written. Ready for data analysis.")
-                
-        def execute_pl(self): 
-            cmd = list(("perl analyze.pl").split(" "))
-            r = subprocess.Popen(cmd)
+        print("\nFile written. Ready for data analysis.")
+        
+    def execute_vmd_script(self): 
+        cmd = list(("source command").split(" "))        
+        r = subprocess.Popen(cmd)
+        r.communicate()
+        
+        
+    def execute_vmd(self): 
+        """
+        Open the VMD tool that is present in the same directory 
+        to execute the calculations for the given pdb structure 
+        
+        Args: 
+            PDB ID [str]
             
-            if r.communicate(): 
-                return ("Command executed")
-            else: 
-                return ("Perl analysis script failed.")
+        Returns: 
+            Open VMD. 
+            
+            If yes: 
+                Execute the VMD command script
+            if no: 
+                Print an error message
+        """
+        
+        pdb_id = self.args.id_input
+        
+        cmd = list((f"vmd {pdb_id}.pdb source command").split(" "))
+        os.chdir("vmd")
+        r = subprocess.Popen(cmd)
+        
+        if r.communicate(): 
+            return ("\nCommand executed. Now execute \
+                    VMD script on terminal")
+        else: 
+            return ("\nPerl analysis script failed.")
 
 args = parse_arguments()    
 c = Pedtior(args)
-c.struct_retrieve()
+# c.struct_retrieve()
 
-a = c.editor()
-c.printer(args, a)
+# a = c.editor()
+# c.printer(args, a)
 
+c.execute_vmd()
+#c.execute_vmd_script()
+
+plotter("/home/nadzhou/Desktop/bonds.csv")
