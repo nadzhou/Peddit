@@ -2,13 +2,14 @@ import os
 import subprocess
 import numpy as np
 import pandas as pd
-import argparse as ap 
-from Bio.PDB import *
 import seaborn as sns
 from Bio import SeqIO
+import argparse as ap 
+from Bio.PDB import *
 from pathlib import Path
 from Bio.PDB import PDBList
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def parse_arguments(parser=None): 
@@ -33,11 +34,16 @@ def plotter(in_file):
     
     data = pd.read_csv(in_file)
 
-    interaction = np.array(data['interaction'])
+    print(data.head())
+    ser = np.array(data['ser'])
+    interaction = np.array(data['ser1'])
     value = np.array(data['value'])
-
-
-    sns.lineplot(x=interaction, y=value)
+    amino_acid = np.array(data['amino_acid'])
+    z = np.array([value, interaction])
+    
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.contour3D(amino_acid, value, z, cmap='binary')
     plt.show()    
                                                                                                                                                                                                                                                                             
 class Pedtior: 
@@ -149,7 +155,7 @@ c = Pedtior(args)
 # a = c.editor()
 # c.printer(args, a)
 
-c.execute_vmd()
+#c.execute_vmd()
 #c.execute_vmd_script()
 
 plotter("/home/nadzhou/Desktop/bonds.csv")
