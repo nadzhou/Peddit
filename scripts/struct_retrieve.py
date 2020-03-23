@@ -138,7 +138,7 @@ class Pedtior:
         
         pdb_id = self.args.id_input
         
-        cmd = list((f"vmd {pdb_id}.pdb source command").split(" "))
+        cmd = list((f"vmd {pdb_id}.pdb | source command").split(" "))
         os.chdir("vmd")
         r = subprocess.Popen(cmd)
         
@@ -148,14 +148,18 @@ class Pedtior:
         else: 
             return ("\nPerl analysis script failed.")
 
+# Initiate the argparse 
+# Take PDB ID as input from terminal
 args = parse_arguments()    
 c = Pedtior(args)
-# c.struct_retrieve()
+c.struct_retrieve()
 
-# a = c.editor()
-# c.printer(args, a)
+a = c.editor()
+c.printer(args, a)
 
-#c.execute_vmd()
-#c.execute_vmd_script()
+# Execute VMD, will atumatically 
+# fetch the pdb of interest. 
+c.execute_vmd()
 
+# Plot the output file from VMD
 plotter("/home/nadzhou/Desktop/bonds.csv")
