@@ -22,7 +22,7 @@ Goals here are the following:
       Remove ADP and EDD
       Remove CONECT 
   1. Then open up VMD to visualize the given PDB file 
-  1. Run the script    source command
+  1. Run the script "sourcce command" in the VMD tk Console. 
   1. Finally, graph the output
   
 I'm doing all of this in a single code file which I intend to change in the future, but the 
