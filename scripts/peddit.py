@@ -3,17 +3,20 @@ import subprocess
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
 from Bio import SeqIO
 import argparse as ap 
 from Bio.PDB import *
 from pathlib import Path
+
 from Bio.PDB import PDBList
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
 def parse_arguments(parser=None): 
-    """Parse arguments given by the terminal for PDB ID."""
+    """Parse arguments given by the terminal for PDB ID.
+    """
     if not parser: 
         parser = ap.ArgumentParser()
     parser.add_argument("id_input", help="Input PDB ID")
@@ -21,15 +24,10 @@ def parse_arguments(parser=None):
 
     return args   
 
+
 def plotter(in_file): 
     """
-    Plot the result.csv file on seaborn barplot
-     
-    Args: 
-        Bonds CSV file [str]
-        
-    Returns: 
-        Seaborn barplot
+        Plot the bonds.csv
     """
     
     data = pd.read_csv(in_file)
@@ -47,19 +45,16 @@ def plotter(in_file):
     plt.show()    
                                                                                                                                                                                                                                                                             
 class Pedtior: 
-    """"Class to edit the PDB file and then write PDB file back"""
+    """"Class to edit the PDB file and then write PDB file back
+    """
+
     def __init__(self, args): 
         """Initialize the Peditor class"""
         self.args = args
         
     def struct_retrieve(self): 
         """
-        Retrieve PDB structure given the PDB Id.
-        
-        Args
-            PDB ID
-        Returns 
-            PDB structure file
+            Retrieve PDB structure given argparse ID
         """
         Pdb_id = str(self.args.id_input)
         pdbl = PDBList()
@@ -69,21 +64,12 @@ class Pedtior:
         if retrieve:  
             p = Path(f'pdb{Pdb_id}.ent')
             p.replace(f'{Pdb_id}.pdb')
+
             print("\nPDB file written.")
 
     def editor(self): 
         """
-        Edit the PDB file to make it ready for 
-        Perl analysis. 
-        Changes made: 
-            1 Remove CONECT
-            2 Remove HETATM HOHS
-            3 Change HETTATM ATPS to LIG
-        
-        Args: 
-            PDB file [str]
-        Returns 
-            Record list with changes [list]  
+            Edit the PDB file. Remove HOH, change ATP to LIG. 
         """
         record = []
         with open(f"{self.args.id_input}.pdb", "r") as f: 
@@ -100,17 +86,11 @@ class Pedtior:
         print("ATPs changed to LIG.\nHETATM water removed")
         print(f"\n Edited file has been rewritten to {self.args.id_input}")          
         return record
-                    
-    def printer(self, args, record): 
+
+
+    def edited_pdb_writer(self, args, record): 
         """
-        Write the record list from the 
-        editor function to file. 
-        
-        Args: 
-            Record [list]
-            Address to write file [str]
-        Returns: 
-            PDB file written [pdb file]
+            Write the edited PDB list to file. 
         """
         with open(f"{self.args.id_input}.pdb", "w") as f: 
             for i in record: 
@@ -121,45 +101,37 @@ class Pedtior:
         
     def execute_vmd(self): 
         """
-        Open the VMD tool that is present in the same directory 
-        to execute the calculations for the given pdb structure 
-        
-        Args: 
-            PDB ID [str]
-            
-        Returns: 
-            Open VMD. 
-            
-            If yes: 
-                Execute the VMD command script
-            if no: 
-                Print an error message
+            Open up VMD and execute command. 
         """
         
         pdb_id = self.args.id_input
         
-        cmd = list((f"vmd {pdb_id}.pdb | source command").split(" "))
+        cmd = list((f"vmd {pdb_id}.pdb -e command").split(" "))
         os.chdir("vmd")
         r = subprocess.Popen(cmd)
         
         if r.communicate(): 
-            return ("\nCommand executed. Now execute \
+            print("\nCommand executed. Now execute \
                     VMD script on terminal")
-        else: 
-            return ("\nPerl analysis script failed.")
 
-# Initiate the argparse 
-# Take PDB ID as input from terminal
-args = parse_arguments()    
-c = Pedtior(args)
-c.struct_retrieve()
 
-a = c.editor()
-c.printer(args, a)
+def main(): 
+    print("Initiating Peddit tool.")
+    args = parse_arguments()    
 
-# Execute VMD, will atumatically 
-# fetch the pdb of interest. 
-c.execute_vmd()
+    c = Pedtior(args)
+    c.struct_retrieve()
 
-# Plot the output file from VMD
-plotter("/home/nadzhou/Desktop/bonds.csv")
+    a = c.editor()
+    c.edited_pdb_writer(args, a)
+
+    print("Executing VMD script..\n")
+    c.execute_vmd()
+
+    # Plot the output file from VMD
+    plotter("/home/nadzhou/Desktop/bonds.csv")
+
+
+
+if __name__ == '__main__': 
+    main()
