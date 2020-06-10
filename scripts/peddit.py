@@ -1,17 +1,11 @@
 import os
 import subprocess
-import numpy as np
-import pandas as pd
-import seaborn as sns
-
 from Bio import SeqIO
 import argparse as ap 
-from Bio.PDB import *
-from pathlib import Path
 
+from pathlib import Path
 from Bio.PDB import PDBList
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+
 
 
 def parse_arguments(parser=None): 
@@ -25,24 +19,7 @@ def parse_arguments(parser=None):
     return args   
 
 
-def plotter(in_file): 
-    """
-        Plot the bonds.csv
-    """
-    
-    data = pd.read_csv(in_file)
-
-    print(data.head())
-    ser = np.array(data['ser'])
-    interaction = np.array(data['ser1'])
-    value = np.array(data['value'])
-    amino_acid = np.array(data['amino_acid'])
-    z = np.array([value, interaction])
-    
-    fig = plt.figure()
-    ax = plt.axes(projection='3d')
-    ax.contour3D(amino_acid, value, z, cmap='binary')
-    plt.show()    
+  
                                                                                                                                                                                                                                                                             
 class Pedtior: 
     """"Class to edit the PDB file and then write PDB file back
@@ -58,7 +35,6 @@ class Pedtior:
         """
         Pdb_id = str(self.args.id_input)
         pdbl = PDBList()
-        ppb = PPBuilder()
 
         retrieve = pdbl.retrieve_pdb_file(Pdb_id, file_format='pdb', pdir=".")
         if retrieve:  
@@ -78,13 +54,16 @@ class Pedtior:
                     if "ATP" in line: 
                         line = line.replace('ATP', 'LIG')
                         record.append(line)
+
                     if 'HOH' not in line: 
                         record.append(line)
                     
                 elif 'CONECT' not in line: 
-                    record.append(line)                
+                    record.append(line) 
+
         print("ATPs changed to LIG.\nHETATM water removed")
-        print(f"\n Edited file has been rewritten to {self.args.id_input}")          
+        print(f"\n Edited file has been rewritten to {self.args.id_input}")  
+
         return record
 
 
@@ -106,8 +85,10 @@ class Pedtior:
         
         pdb_id = self.args.id_input
         
-        cmd = list((f"vmd {pdb_id}.pdb -e command").split(" "))
+        # start VMD.lnk 4xuh.pdb -e command
+        cmd = list((f"vmd {pdb_id} -e command").split(" "))
         os.chdir("vmd")
+
         r = subprocess.Popen(cmd)
         
         if r.communicate(): 
