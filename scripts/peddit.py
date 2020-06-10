@@ -6,9 +6,10 @@ import argparse as ap
 from pathlib import Path
 from Bio.PDB import PDBList
 
+from typing import List
 
 
-def parse_arguments(parser=None): 
+def parse_arguments(parser: 'argparse obj'=None) -> 'argparse obj': 
     """Parse arguments given by the terminal for PDB ID.
     """
     if not parser: 
@@ -18,17 +19,17 @@ def parse_arguments(parser=None):
 
     return args   
 
-
-  
                                                                                                                                                                                                                                                                             
 class Pedtior: 
     """"Class to edit the PDB file and then write PDB file back
     """
 
     def __init__(self, args): 
-        """Initialize the Peditor class"""
+        """Initialize the Peditor class
+        """
         self.args = args
         
+
     def struct_retrieve(self): 
         """
             Retrieve PDB structure given argparse ID
@@ -43,7 +44,8 @@ class Pedtior:
 
             print("\nPDB file written.")
 
-    def editor(self): 
+
+    def editor(self) -> List: 
         """
             Edit the PDB file. Remove HOH, change ATP to LIG. 
         """
@@ -67,7 +69,7 @@ class Pedtior:
         return record
 
 
-    def edited_pdb_writer(self, args, record): 
+    def edited_pdb_writer(self, args: 'argparse obj', record: List[str]): 
         """
             Write the edited PDB list to file. 
         """
