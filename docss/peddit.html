@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module peddit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>peddit</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/nadzhou/DEVELOPMENT/p_editor/scripts/peddit.py">/home/nadzhou/DEVELOPMENT/p_editor/scripts/peddit.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Bio.SeqIO.html">Bio.SeqIO</a><br>
+</td><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="subprocess.html">subprocess</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="peddit.html#Pedtior">Pedtior</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Pedtior">class <strong>Pedtior</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Pedtior">Pedtior</a>(args)<br>
+&nbsp;<br>
+"Class&nbsp;to&nbsp;edit&nbsp;the&nbsp;PDB&nbsp;file&nbsp;and&nbsp;then&nbsp;write&nbsp;PDB&nbsp;file&nbsp;back<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Pedtior-__init__"><strong>__init__</strong></a>(self, args)</dt><dd><tt>Initialize&nbsp;the&nbsp;Peditor&nbsp;class</tt></dd></dl>
+
+<dl><dt><a name="Pedtior-edited_pdb_writer"><strong>edited_pdb_writer</strong></a>(self, args: 'argparse obj', record: List[str])</dt><dd><tt>Write&nbsp;the&nbsp;edited&nbsp;PDB&nbsp;list&nbsp;to&nbsp;file.</tt></dd></dl>
+
+<dl><dt><a name="Pedtior-editor"><strong>editor</strong></a>(self) -&gt; List</dt><dd><tt>Edit&nbsp;the&nbsp;PDB&nbsp;file.&nbsp;Remove&nbsp;HOH,&nbsp;change&nbsp;ATP&nbsp;to&nbsp;LIG.</tt></dd></dl>
+
+<dl><dt><a name="Pedtior-execute_vmd"><strong>execute_vmd</strong></a>(self)</dt><dd><tt>Open&nbsp;up&nbsp;VMD&nbsp;and&nbsp;execute&nbsp;command.</tt></dd></dl>
+
+<dl><dt><a name="Pedtior-replace_ent_to_pdb_name"><strong>replace_ent_to_pdb_name</strong></a>(self)</dt><dd><tt>Replace&nbsp;the&nbsp;pdb-.ent&nbsp;name&nbsp;with&nbsp;self.<strong>pdb_id</strong>.pdb</tt></dd></dl>
+
+<dl><dt><a name="Pedtior-struct_retrieve"><strong>struct_retrieve</strong></a>(self)</dt><dd><tt>Retrieve&nbsp;PDB&nbsp;structure&nbsp;given&nbsp;argparse&nbsp;ID</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-main"><strong>main</strong></a>()</dt></dl>
+ <dl><dt><a name="-parse_arguments"><strong>parse_arguments</strong></a>(parser: 'argparse obj' = None) -&gt; 'argparse obj'</dt><dd><tt>Parse&nbsp;arguments&nbsp;given&nbsp;by&nbsp;the&nbsp;terminal&nbsp;for&nbsp;PDB&nbsp;ID.<br>
+&nbsp;<br>
+Returns:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;args&nbsp;[argparse&nbsp;obj]:&nbsp;PDB&nbsp;ID&nbsp;argparse&nbsp;<a href="builtins.html#object">object</a></tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>List</strong> = typing.List</td></tr></table>
+</body></html>
