@@ -5,14 +5,23 @@ import argparse as ap
 
 from pathlib import Path
 from Bio.PDB import PDBList
+<<<<<<< HEAD
+=======
+
+from typing import List
+>>>>>>> e15c505e56d7f73deaadb53b7b7f015aee12ed43
 
 from typing import List
 
 def parse_arguments(parser: 'argparse obj'=None) -> 'argparse obj': 
+<<<<<<< HEAD
     """  Parse arguments given by the terminal for PDB ID.
 
         Returns: 
             args [argparse obj]: PDB ID argparse object
+=======
+    """Parse arguments given by the terminal for PDB ID.
+>>>>>>> e15c505e56d7f73deaadb53b7b7f015aee12ed43
     """
     if not parser: 
         parser = ap.ArgumentParser()
@@ -51,6 +60,10 @@ class Pedtior:
         print("\nPDB file written.")
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e15c505e56d7f73deaadb53b7b7f015aee12ed43
     def editor(self) -> List: 
         """
             Edit the PDB file. Remove HOH, change ATP to LIG. 
@@ -90,9 +103,17 @@ class Pedtior:
         """
             Open up VMD and execute command. 
         """
+<<<<<<< HEAD
                 
         # start VMD.lnk 4xuh.pdb -e command
         cmd = list((f"vmd {self.pdb_id} -e command.txt").split(" "))
+=======
+        
+        pdb_id = self.args.id_input
+        
+        # start VMD.lnk 4xuh.pdb -e command
+        cmd = list((f"vmd {pdb_id} -e command").split(" "))
+>>>>>>> e15c505e56d7f73deaadb53b7b7f015aee12ed43
         os.chdir("vmd")
 
         r = subprocess.Popen(cmd)
