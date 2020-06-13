@@ -1,4 +1,10 @@
-# Peddit - A PDB editor tool
+# Peddit - A PDB editor plugin
+
+_New_: Added vmd-python ([Robin Betz](https://github.com/Eigenstate)) and bondwriter ([Viktor](https://github.com/Vikdemen)) 
+to make the tool indepdendent of the binary VMD to installable vmd-python tool. 
+
+* Now the code will run as a Python script instead of a VMD script. 
+
 Python script for PDB editing and analysis. Tool is a handy addition to automatically 
 retrieveing PDB structures which is then used to make calculations on via VMD. 
 
@@ -12,6 +18,25 @@ Thus automating the whole process, this tool adds to my arsenal of piping dev th
 I've been doing for quite a while now. 
 
 ![image](https://user-images.githubusercontent.com/25282805/77248689-1814dc00-6c5d-11ea-85fa-94f4321de1d4.png)
+
+## USAGE
+On the command line: 
+
+    $ python main.py <pdb_idb> <output directory> 
+
+This will run the code and plot the data shown below as a result. 
+
+Example: 
+
+    $ python main.py 1fmw /home/1fmw
+
+## DEPENDENCIES 
+The tool depends on the following: 
+
+    * vmd-python by Robin Betz: https://github.com/Eigenstate/vmd-python
+    * Python 3 
+    * Numpy
+    * Matplotlib and seaborn
 
 ## GOALS
 Goals here are the following: 
