@@ -6,6 +6,9 @@ import argparse as ap
 from pathlib import Path
 from Bio.PDB import PDBList
 
+from peddit.bondwriter import calculate_fbonds
+from peddit.bondwriter import write_to_file
+
 from pathlib import Path
 from typing import List
 
@@ -50,7 +53,7 @@ class Peditor:
             Edit the PDB file. Remove HOH, change ATP to LIG. 
         """
         record = []
-        with open(f"{self.pdb_id}.pdb", "r") as f: 
+        with open(f"{self.out_dir}/{self.pdb_id}.pdb", "r") as f: 
             for line in f: 
                 if 'HETATM' in line: 
                     if "ATP" in line: 
@@ -63,8 +66,8 @@ class Peditor:
                 elif 'CONECT' not in line: 
                     record.append(line) 
 
-        print("ATPs changed to LIG.\nHETATM water removed")
-        print(f"\n Edited file has been rewritten to {self.args.id_input}")  
+        print("\nATPs changed to LIG.\nHETATM water removed")
+        print(f"\nEdited file has been rewritten to {self.args.id_input}")  
 
         return record
 

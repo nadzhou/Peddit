@@ -18,6 +18,9 @@ def plotter(in_file):
                         y="value", 
                         data=data)
 
+    plt.title("Interaction of amino acids interaction values")
+    plt.xlabel("Amino acid")
+    plt.ylabel("Values")
     return ax 
 
 
