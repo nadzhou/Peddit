@@ -1,8 +1,3 @@
-# Credits: https://github.com/Vikdemen 
-# I'd like to thank Viktor for changing the VMD TCL 
-# script to Python 3, modernizing at least part of the 
-# visualization tool. 
-
 # Credits: https://github.com/Eigenstate/vmd-python
 # Thanks to Robin Betz for creating an installable 
 # Python 3 version of VMD. 
