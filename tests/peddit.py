@@ -6,16 +6,10 @@ import argparse as ap
 from pathlib import Path
 from Bio.PDB import PDBList
 
-from bondwriter import calculate_fbonds
-from bondwriter import write_to_file
-from plotter import plotter
-
-import matplotlib.pyplot as plt
-from pathlib import Path
 from typing import List
 
 def parse_arguments(parser: 'argparse obj'=None) -> 'argparse obj': 
-    """ Parse arguments given by the terminal for PDB ID.
+    """  Parse arguments given by the terminal for PDB ID.
 
         Returns: 
             args [argparse obj]: PDB ID argparse object
@@ -23,8 +17,6 @@ def parse_arguments(parser: 'argparse obj'=None) -> 'argparse obj':
     if not parser: 
         parser = ap.ArgumentParser()
     parser.add_argument("id_input", help="Input PDB ID")
-    parser.add_argument("output_path", help="Output directory for PDB and bonds file.")
-
     args = parser.parse_args()
 
     return args   
@@ -38,31 +30,25 @@ class Peditor:
         """Initialize the Peditor class
         """
         self.args = args
-        self.pdb_id = self.args.id_input
-        self.out_dir = self.args.output_path
-        self.out_dir = self.make_output_dir()
         
-    
-    def make_output_dir(self) -> 'pathlib obj': 
-        self.out_dir = Path(self.out_dir)
-        self.out_dir.mkdir(parents=True, exist_ok=True)
-
-        return self.out_dir
 
     def struct_retrieve(self): 
         """
             Retrieve PDB structure given argparse ID
         """
+        self.pdb_id = str(self.args.id_input)
         pdbl = PDBList()
 
-        pdbl.retrieve_pdb_file(self.pdb_id, file_format='pdb', pdir=f"{self.out_dir}/")
+        pdbl.retrieve_pdb_file(self.pdb_id, file_format='pdb', pdir=".")
         
 
     def replace_ent_to_pdb_name(self): 
         """Replace the pdb-.ent name with self.pdb_id.pdb
         """
-        p = Path(f'{self.out_dir}/pdb{self.pdb_id}.ent')
-        p.replace(f'{self.out_dir}/{self.pdb_id}.pdb')
+        p = Path(f'pdb{self.pdb_id}.ent')
+        p.replace(f'{self.pdb_id}.pdb')
+
+        print("\nPDB file written.")
 
 
     def editor(self) -> List: 
@@ -70,7 +56,7 @@ class Peditor:
             Edit the PDB file. Remove HOH, change ATP to LIG. 
         """
         record = []
-        with open(f"{self.pdb_id}.pdb", "r") as f: 
+        with open(f"{self.args.id_input}.pdb", "r") as f: 
             for line in f: 
                 if 'HETATM' in line: 
                     if "ATP" in line: 
@@ -93,23 +79,27 @@ class Peditor:
         """
             Write the edited PDB list to file. 
         """
-        with open(f"{self.out_dir}/{self.pdb_id}.pdb", "w") as f: 
+        with open(f"{self.pdb_id}.pdb", "w") as f: 
             for i in record: 
                 f.write(i)
                 
         print("\nFile written. Ready for data analysis.")
         
         
-    def calculate_interaction(self, bonds_out_file: str): 
-        """ Invoke the bondwriter module to calculate bonds and write to file
-
-            Args: 
-                bonds_out_file [str]: Output CSV file
-
+    def execute_vmd(self): 
         """
-        bonds_data = calculate_fbonds(f"{self.out_dir}/{self.pdb_id}.pdb")
+            Open up VMD and execute command. 
+        """
+                
+        # start VMD.lnk 4xuh.pdb -e command
+        cmd = list((f"vmd {self.pdb_id} -e command.txt").split(" "))
+        os.chdir("vmd")
 
-        write_to_file(bonds_data, self.out_dir/bonds_out_file)
+        r = subprocess.Popen(cmd)
+        
+        if r.communicate(): 
+            print("\nCommand executed. Now execute \
+                    VMD script on terminal")
 
 
 def main(): 
@@ -118,21 +108,13 @@ def main():
 
     c = Peditor(args)
     c.struct_retrieve()
-    c.replace_ent_to_pdb_name()
 
     a = c.editor()
     c.edited_pdb_writer(args, a)
-    print("\nPDB file written.")
+    c.replace_ent_to_pdb_name()
 
-
-    print(f"Calculating bonds for {args.id_input}.pdb...")
-    c.calculate_interaction(f"{args.id_input}_bonds.csv")
-    print("Writing bonds interaction file: done")
-
-
-    print("\nPlotting the data...")
-    plotter(f"{args.id_input}_bonds.csv")
-    plt.show()
+    print("Executing VMD script..\n")
+    c.execute_vmd()
 
 
 if __name__ == '__main__': 
