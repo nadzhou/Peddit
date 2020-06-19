@@ -1,3 +1,8 @@
+# Credit to Viktor Demenev: https://github.com/Vikdemen
+# who wrote the bondwriter Python file to convert the 
+# TCL script to Python. 
+
+
 # Credits: https://github.com/Eigenstate/vmd-python
 # Thanks to Robin Betz for creating an installable 
 # Python 3 version of VMD. 

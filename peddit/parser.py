@@ -8,6 +8,7 @@ def parse_arguments(parser: 'argparse obj'=None) -> 'argparse obj':
     """
     if not parser: 
         parser = ap.ArgumentParser()
+
     parser.add_argument("id_input", help="Input PDB ID")
     parser.add_argument("output_path", help="Output directory for PDB and bonds file.")
 
